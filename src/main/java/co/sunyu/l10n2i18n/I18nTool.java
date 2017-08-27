@@ -27,7 +27,7 @@ public class I18nTool {
 		FileUtil.saveI18nList(sourceList, BASE_PATH + "/message_CN.properties");
 		FileUtil.saveI18nList(targetList, BASE_PATH + "/message_EN.properties");
 
-		System.out.println("finish~~~");
+		System.out.println("Finish!");
 
 	}
 

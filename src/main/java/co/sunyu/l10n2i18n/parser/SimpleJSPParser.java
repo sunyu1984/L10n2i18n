@@ -51,7 +51,7 @@ public class SimpleJSPParser {
 				if (line == null) {
 					break;
 				} else {
-					parseLine(fileName, line, sourceMap);
+					line = parseLine(fileName, line, sourceMap);
 					writer.write(line + "\n");
 					flag = true;
 				}
@@ -75,7 +75,7 @@ public class SimpleJSPParser {
 			writer.flush();
 			writer.close();
 
-			if (flag) {
+			if (flag) {//if file changed
 				file.renameTo(new File(file.getAbsolutePath() + ".bak"));
 				tmpfile.renameTo(new File(file.getAbsolutePath()));
 			} else
@@ -91,16 +91,14 @@ public class SimpleJSPParser {
 		Matcher sourceMatcher = SOURCE_PATTERN.matcher(line);
 		StringBuffer lineStrBuffer = new StringBuffer();
 		while (sourceMatcher.find()) {
-
+			
 			String sourceString = sourceMatcher.group();
 			Matcher symbolMatcher = SYMBOL.matcher(sourceString);
 			String sourceStringNoSym = symbolMatcher.replaceAll("").trim();
 			System.out.println("sourceString:" + sourceString);
-
 			String propId = fileName.replace(".jsp", ".") + ChineseCharToEnUtil.getAllFirstLetter(sourceStringNoSym);
-
 			sourceMap.put(sourceString, propId);
-
+			
 			sourceMatcher.appendReplacement(lineStrBuffer, SPRING_TAG.format(new String[] { sourceString, propId }));
 		}
 		sourceMatcher.appendTail(lineStrBuffer);
