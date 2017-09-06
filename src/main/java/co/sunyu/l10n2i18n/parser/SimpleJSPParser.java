@@ -12,10 +12,10 @@ import co.sunyu.l10n2i18n.util.TranslateUtil;
 public class SimpleJSPParser {
 
 	// chinese regex
-	private static final Pattern SOURCE_PATTERN = Pattern
+	private static final Pattern CHINESE_PATTERN = Pattern
 			.compile("[ \\w\\ufe30-\\uffa0\\u4e00-\\u9fa5]*[\\u4e00-\\u9fa5]+[ \\w\\ufe30-\\uffa0\\u4e00-\\u9fa5]*");
 	// symbol regex
-	private static final Pattern SYMBOL = Pattern
+	private static final Pattern SYMBOL_PATTERN = Pattern
 			.compile("[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……&*（）——+|{}【】‘；：”“’。，、？]");
 	// spring message tag format
 	private static final MessageFormat SPRING_TAG = new MessageFormat("<!-- {0} --><spring:message code=\"{1}\"/>");
@@ -88,12 +88,12 @@ public class SimpleJSPParser {
 	// replace chinese to taglib
 	public static String parseLine(String fileName, String line, Map<String, String> sourceMap) {
 
-		Matcher sourceMatcher = SOURCE_PATTERN.matcher(line);
+		Matcher sourceMatcher = CHINESE_PATTERN.matcher(line);
 		StringBuffer lineStrBuffer = new StringBuffer();
 		while (sourceMatcher.find()) {
 			
 			String sourceString = sourceMatcher.group();
-			Matcher symbolMatcher = SYMBOL.matcher(sourceString);
+			Matcher symbolMatcher = SYMBOL_PATTERN.matcher(sourceString);
 			String sourceStringNoSym = symbolMatcher.replaceAll("").trim();
 			System.out.println("sourceString:" + sourceString);
 			String propId = fileName.replace(".jsp", ".") + ChineseCharToEnUtil.getAllFirstLetter(sourceStringNoSym);
